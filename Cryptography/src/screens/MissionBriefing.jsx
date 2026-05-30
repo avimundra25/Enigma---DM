@@ -102,9 +102,10 @@ const pulseGlow = {
   ],
 };
 
-function MissionBriefing({ onStartMission }) {
+function MissionBriefing({ onStartMission, onReadManual, introPlayed, setIntroPlayed }) {
   // Phase state: 'boot' → 'document' → 'title'
-  const [phase, setPhase] = useState('boot');
+  // Skip to 'title' if intro was already played
+  const [phase, setPhase] = useState(introPlayed ? 'title' : 'boot');
 
   /** Called when the boot TerminalText finishes typing all lines */
   const handleBootComplete = useCallback(() => {
@@ -115,9 +116,12 @@ function MissionBriefing({ onStartMission }) {
 
   /** Called when the briefing TerminalText finishes typing inside the document */
   const handleDocumentComplete = useCallback(() => {
-    const timer = setTimeout(() => setPhase('title'), 1200);
+    const timer = setTimeout(() => {
+      setPhase('title');
+      if (setIntroPlayed) setIntroPlayed(true);
+    }, 1200);
     return () => clearTimeout(timer);
-  }, []);
+  }, [setIntroPlayed]);
 
   return (
     <div
@@ -256,33 +260,55 @@ function MissionBriefing({ onStartMission }) {
                 }}
               />
 
-              {/* CTA Button */}
-              <motion.button
-                variants={titleChildVariants}
-                onClick={onStartMission}
-                className="relative px-10 py-4 border-2 border-[#00d4ff] text-[#00d4ff] text-sm tracking-[0.3em] uppercase cursor-pointer rounded-sm"
-                style={{
-                  background: 'transparent',
-                  fontFamily: "'Orbitron', sans-serif",
-                }}
-                animate={pulseGlow}
-                transition={{
-                  boxShadow: {
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  },
-                }}
-                whileHover={{
-                  backgroundColor: '#00d4ff',
-                  color: '#0a0a0f',
-                  scale: 1.05,
-                  transition: { duration: 0.25 },
-                }}
-                whileTap={{ scale: 0.97 }}
-              >
-                Initiate Mission
-              </motion.button>
+              {/* CTA Buttons */}
+              <div className="flex flex-col md:flex-row gap-4 items-center mt-4">
+                <motion.button
+                  variants={titleChildVariants}
+                  onClick={onStartMission}
+                  className="relative px-10 py-4 border-2 border-[#00d4ff] text-[#00d4ff] text-sm tracking-[0.3em] uppercase cursor-pointer rounded-sm"
+                  style={{
+                    background: 'transparent',
+                    fontFamily: "'Orbitron', sans-serif",
+                  }}
+                  animate={pulseGlow}
+                  transition={{
+                    boxShadow: {
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    },
+                  }}
+                  whileHover={{
+                    backgroundColor: '#00d4ff',
+                    color: '#0a0a0f',
+                    scale: 1.05,
+                    transition: { duration: 0.25 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Initiate Mission
+                </motion.button>
+
+                <motion.button
+                  variants={titleChildVariants}
+                  onClick={onReadManual}
+                  className="relative px-8 py-4 border border-[#ffffff40] text-[#ffffff80] text-sm tracking-[0.2em] uppercase cursor-pointer rounded-sm"
+                  style={{
+                    background: 'transparent',
+                    fontFamily: "'Orbitron', sans-serif",
+                  }}
+                  whileHover={{
+                    borderColor: '#00ff41',
+                    color: '#00ff41',
+                    backgroundColor: 'rgba(0, 255, 65, 0.05)',
+                    scale: 1.05,
+                    transition: { duration: 0.25 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  [ Read Field Manual ]
+                </motion.button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

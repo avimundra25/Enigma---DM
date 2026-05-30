@@ -4,6 +4,7 @@ import MissionBriefing from './screens/MissionBriefing';
 import EncryptionLab from './screens/EncryptionLab';
 import SpyMission from './screens/SpyMission';
 import BackButton from './components/BackButton';
+import TheoryManual from './screens/TheoryManual';
 
 /**
  * App — Root component and state machine router for Project ENIGMA.
@@ -45,6 +46,7 @@ const screenVariants = {
 function App() {
   const [currentScreen, setCurrentScreen] = useState('briefing');
   const [showFlash, setShowFlash] = useState(false);
+  const [introPlayed, setIntroPlayed] = useState(false);
 
   const transitionTo = useCallback((screen) => {
     setShowFlash(true);
@@ -56,11 +58,14 @@ function App() {
 
   const handleStartMission = useCallback(() => transitionTo('lab'), [transitionTo]);
   const handleLabComplete = useCallback(() => transitionTo('mission'), [transitionTo]);
+  const handleReadManual = useCallback(() => transitionTo('theory'), [transitionTo]);
   
   const handleGoBack = useCallback(() => {
     if (currentScreen === 'mission') {
       transitionTo('lab');
     } else if (currentScreen === 'lab') {
+      transitionTo('briefing');
+    } else if (currentScreen === 'theory') {
       transitionTo('briefing');
     }
   }, [currentScreen, transitionTo]);
@@ -76,7 +81,12 @@ function App() {
             animate="animate"
             exit="exit"
           >
-            <MissionBriefing onStartMission={handleStartMission} />
+            <MissionBriefing 
+              onStartMission={handleStartMission} 
+              onReadManual={handleReadManual} 
+              introPlayed={introPlayed} 
+              setIntroPlayed={setIntroPlayed} 
+            />
           </motion.div>
         );
       case 'lab':
@@ -101,6 +111,18 @@ function App() {
             exit="exit"
           >
             <SpyMission />
+          </motion.div>
+        );
+      case 'theory':
+        return (
+          <motion.div
+            key="theory"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <TheoryManual />
           </motion.div>
         );
       default:
