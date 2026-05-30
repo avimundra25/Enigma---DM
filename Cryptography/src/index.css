@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   PROJECT ENIGMA — Design System & Custom Animations
+   A cinematic spy cryptography simulator
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --color-enigma-dark: #0a0a0f;
+  --color-enigma-panel: #111118;
+  --color-enigma-green: #00ff41;
+  --color-enigma-cyan: #00d4ff;
+  --color-enigma-amber: #ffb000;
+  --color-enigma-red: #ff0040;
+  --color-enigma-purple: #9d4edd;
+  --color-enigma-muted: #2a2a3a;
+}
+
+/* ── Base Styles ──────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-enigma-green) var(--color-enigma-dark);
+}
+
+body {
+  background-color: var(--color-enigma-dark);
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-enigma-cyan);
+  color: var(--color-enigma-dark);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-enigma-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-enigma-green);
+  border-radius: 3px;
+}
+
+/* ── Glitch Effect ────────────────────────────────────────────── */
+
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glitch::before {
+  color: var(--color-enigma-red);
+  animation: glitch-shift-1 3s infinite linear alternate-reverse;
+  clip-path: inset(0 0 80% 0);
+  opacity: 0.7;
+}
+
+.glitch::after {
+  color: var(--color-enigma-cyan);
+  animation: glitch-shift-2 2.5s infinite linear alternate-reverse;
+  clip-path: inset(80% 0 0 0);
+  opacity: 0.7;
+}
+
+@keyframes glitch-shift-1 {
+  0%, 90% { transform: translate(0); }
+  91% { transform: translate(-2px, 1px); }
+  93% { transform: translate(2px, -1px); }
+  95% { transform: translate(-1px, 2px); }
+  97% { transform: translate(1px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-shift-2 {
+  0%, 88% { transform: translate(0); }
+  89% { transform: translate(2px, -1px); }
+  92% { transform: translate(-2px, 2px); }
+  94% { transform: translate(1px, 1px); }
+  96% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* ── Scanline Animation ──────────────────────────────────────── */
+
+@keyframes scanline-move {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+
+.scanline-bar {
+  animation: scanline-move 8s linear infinite;
+}
+
+/* ── Typing Cursor ───────────────────────────────────────────── */
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typing-cursor {
+  animation: cursor-blink 0.8s step-end infinite;
+  color: var(--color-enigma-green);
+}
+
+/* ── Pulse Glow ──────────────────────────────────────────────── */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-enigma-cyan),
+                0 0 10px rgba(0, 212, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px var(--color-enigma-cyan),
+                0 0 30px rgba(0, 212, 255, 0.4),
+                0 0 45px rgba(0, 212, 255, 0.1);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ── Node Glow for SVG ───────────────────────────────────────── */
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.node-pulse {
+  animation: node-pulse 1.5s ease-in-out infinite;
+}
+
+/* ── Boot Text ───────────────────────────────────────────────── */
+
+@keyframes boot-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.4; }
+  97% { opacity: 0.9; }
+  98% { opacity: 0.3; }
+}
+
+.boot-text {
+  animation: boot-flicker 4s ease-in-out infinite;
+}
+
+/* ── Edge Path Animation ─────────────────────────────────────── */
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.edge-path-active {
+  stroke-dasharray: 8 4;
+  animation: dash-flow 0.8s linear infinite;
+}
+
+/* ── Stamp Pulse ─────────────────────────────────────────────── */
+
+@keyframes stamp-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+}
+
+.stamp-pulse {
+  animation: stamp-pulse 3s ease-in-out infinite;
+}
+
+/* ── Screen Flash ────────────────────────────────────────────── */
+
+@keyframes screen-flash {
+  0% { opacity: 0; }
+  10% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+.screen-flash {
+  animation: screen-flash 0.4s ease-out forwards;
+}
+
+/* ── Utility Classes ─────────────────────────────────────────── */
+
+.text-glow-green {
+  text-shadow: 0 0 10px var(--color-enigma-green),
+               0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px var(--color-enigma-cyan),
+               0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 10px var(--color-enigma-amber),
+               0 0 20px rgba(255, 176, 0, 0.3);
+}
+
+.text-glow-red {
+  text-shadow: 0 0 10px var(--color-enigma-red),
+               0 0 20px rgba(255, 0, 64, 0.3);
+}
+
+.border-glow-cyan {
+  box-shadow: 0 0 5px rgba(0, 212, 255, 0.2),
+              inset 0 0 5px rgba(0, 212, 255, 0.05);
+}
+
+.border-glow-green {
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.2),
+              inset 0 0 5px rgba(0, 255, 65, 0.05);
+}
+
+/* ── Custom Terminal Scrollbar ───────────────────────────────── */
+
+.terminal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-enigma-green);
+  border-radius: 2px;
+}
